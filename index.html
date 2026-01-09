@@ -8,20 +8,21 @@
     <link rel="stylesheet" href="css/style.css">
     
     <style>
+        /* 1. VIDEO PARALLAX FIXES */
         .video-wrapper {
-            position: fixed; /* Freezes video in place */
+            position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            z-index: -1; /* Pushes video BEHIND text */
+            z-index: -1;
         }
 
         .bg-video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures video covers screen without stretching */
+            object-fit: cover;
         }
 
         .video-overlay {
@@ -30,14 +31,119 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Darkens video so text pops */
+            background: rgba(0, 0, 0, 0.75); /* Dark tint for readability */
             z-index: 1;
         }
-        
-        /* Ensure text sits on top */
-        .navbar, .container {
+
+        /* 2. LAYOUT & SCROLLING */
+        /* Ensures content sits above video */
+        .navbar, .main-scroll-container {
             position: relative;
             z-index: 2;
+        }
+
+        /* Hero takes up full viewport initially */
+        .hero-screen {
+            min-height: 90vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-bottom: 2rem;
+        }
+
+        /* 3. NEW SECTIONS TYPOGRAPHY */
+        .content-section {
+            padding: 4rem 0;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .section-label {
+            font-family: 'Courier New', Courier, monospace;
+            color: #555;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .text-lead {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .text-sub {
+            font-family: 'Courier New', Courier, monospace;
+            color: #ccc;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            max-width: 600px;
+        }
+
+        .text-dim {
+            color: #666;
+        }
+
+        /* Steps List */
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-item {
+            margin-bottom: 2rem;
+        }
+
+        .step-title {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+        }
+
+        .step-desc {
+            font-family: 'Courier New', Courier, monospace;
+            color: #888;
+        }
+
+        /* Stacked List */
+        .stacked-list div {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 1rem 0;
+        }
+
+        .stacked-list div:last-child {
+            border-bottom: none;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            display: inline-block;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 15px 40px;
+            font-family: 'Courier New', Courier, monospace;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #fff;
+            color: #000;
+        }
+        
+        .micro-text {
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 10px;
+            display: block;
         }
     </style>
 </head>
@@ -61,17 +167,89 @@
         </ul>
     </nav>
 
-    <main class="container">
+    <main class="container main-scroll-container">
+        
         <section class="hero-screen">
             <h1 class="hero-title">TONI IS NOT<br>ALWAYS<br>AVAILABLE.</h1>
             
+            <p class="text-sub" style="margin-bottom: 2rem;">
+                Limited edition drops. No restocks.<br>
+                Join the few who stay informed.
+            </p>
+            
             <div class="status-block mono">
                 <span class="status-dot"></span>
-                <span>SYSTEM STATUS: STANDBY</span>
+                <span>CURRENT DROP: STANDBY</span>
             </div>
 
-            <a href="access.html" class="hero-cta">REQUEST NOTIFICATION</a>
+            <div style="margin-top: 1rem;">
+                <a href="access.html" class="btn-primary">GET NOTIFIED</a>
+            </div>
         </section>
+
+        <section class="content-section">
+            <div class="text-lead">
+                TONI is a limited-edition culture project.
+            </div>
+            <p class="text-sub">
+                We release items without warning.<br>
+                We don’t restock.<br>
+                We don’t repeat drops.
+            </p>
+            <p class="text-sub text-dim" style="margin-top: 1rem;">
+                Each release is a moment. Not a catalog.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <span class="section-label">HOW IT WORKS</span>
+            <ul class="steps-list">
+                <li class="step-item">
+                    <span class="step-title">1. A DROP IS ANNOUNCED</span>
+                    <span class="step-desc">Only through our signal.</span>
+                </li>
+                <li class="step-item">
+                    <span class="step-title">2. THE DROP OPENS</span>
+                    <span class="step-desc">For a short time. No extensions.</span>
+                </li>
+                <li class="step-item">
+                    <span class="step-title">3. IT CLOSES FOREVER</span>
+                    <span class="step-desc">What’s gone stays gone.</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <span class="section-label">WHAT APPEARS</span>
+            <div class="stacked-list">
+                <div>Limited-run T-shirts</div>
+                <div>Stickers & printed artifacts</div>
+                <div>Objects made once</div>
+                <div>Experiments that don’t return</div>
+            </div>
+            <p class="text-sub text-dim" style="margin-top: 1.5rem;">
+                Not every drop looks the same.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h2 class="text-lead" style="font-size: clamp(2rem, 5vw, 4rem);">
+                We don’t chase volume.<br>
+                We don’t flood the feed.<br>
+                We don’t explain everything.<br>
+                <span class="text-dim">TONI exists between drops.</span>
+            </h2>
+        </section>
+
+        <section class="content-section" style="padding-bottom: 8rem;">
+            <h2 class="hero-title" style="font-size: clamp(2.5rem, 6vw, 5rem);">STAY CLOSE.<br>OR MISS IT.</h2>
+            <p class="text-sub">Drops are not announced publicly.</p>
+            
+            <a href="access.html" class="btn-primary">GET NOTIFIED</a>
+            
+            <span class="micro-text mono">Only drop alerts. Nothing extra.</span>
+        </section>
+
     </main>
 
     <script>
