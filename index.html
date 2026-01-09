@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TONI. Not always available. Underground culture drops.">
+    <title>TONI — PORTAL</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">TONI</a>
+        <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active mono">Portal</a></li>
+            <li><a href="drops.html" class="mono">Drops</a></li>
+            <li><a href="about.html" class="mono">Signal</a></li>
+            <li><a href="access.html" class="mono">Access</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section class="hero-screen">
+            <h1 class="hero-title">TONI IS NOT<br>ALWAYS<br>AVAILABLE.</h1>
+            
+            <div class="status-block mono">
+                <span class="status-dot"></span>
+                <span>SYSTEM STATUS: STANDBY</span>
+            </div>
+
+            <a href="access.html" class="hero-cta">REQUEST NOTIFICATION</a>
+        </section>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
