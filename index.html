@@ -6,6 +6,40 @@
     <meta name="description" content="TONI. Not always available. Underground culture drops.">
     <title>TONI — PORTAL</title>
     <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .video-wrapper {
+            position: fixed; /* Freezes video in place */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1; /* Pushes video BEHIND text */
+        }
+
+        .bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures video covers screen without stretching */
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Darkens video so text pops */
+            z-index: 1;
+        }
+        
+        /* Ensure text sits on top */
+        .navbar, .container {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
 </head>
 <body>
 
