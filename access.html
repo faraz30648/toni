@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TONI — ACCESS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">TONI</a>
+        <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+        <ul class="nav-links">
+            <li><a href="index.html" class="mono">Portal</a></li>
+            <li><a href="drops.html" class="mono">Drops</a></li>
+            <li><a href="about.html" class="mono">Signal</a></li>
+            <li><a href="access.html" class="active mono">Access</a></li>
+        </ul>
+    </nav>
+
+    <main class="container section">
+        <header style="margin-bottom: 2rem;">
+            <h1 class="mono dim">REQ_ACCESS</h1>
+            <p style="margin-top: 1rem; max-width: 400px;">
+                Drops are not announced publicly on social media. The signal is sent via email. 
+            </p>
+        </header>
+
+        <form class="access-form" onsubmit="event.preventDefault(); alert('YOU ARE IN THE QUEUE.');">
+            <div class="input-group">
+                <input type="email" placeholder="ENTER EMAIL ADDRESS" required>
+            </div>
+            <button type="submit" class="btn-submit">Initialize</button>
+        </form>
+
+        <p class="mono dim" style="margin-top: 4rem; font-size: 0.7rem;">
+            WE DO NOT SPAM. WE NOTIFY.
+        </p>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
