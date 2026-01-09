@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TONI — DROPS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">TONI</a>
+        <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+        <ul class="nav-links">
+            <li><a href="index.html" class="mono">Portal</a></li>
+            <li><a href="drops.html" class="active mono">Drops</a></li>
+            <li><a href="about.html" class="mono">Signal</a></li>
+            <li><a href="access.html" class="mono">Access</a></li>
+        </ul>
+    </nav>
+
+    <main class="container section">
+        <header style="margin-bottom: 4rem;">
+            <h1 class="mono dim">DROP LOG</h1>
+        </header>
+
+        <div class="drops-list">
+            <div class="drop-item">
+                <div class="drop-id mono">002</div>
+                <div class="drop-desc">
+                    <h3>HEAVY METAL SILENCE</h3>
+                    <p class="dim mono">T-Shirt / Artifact</p>
+                </div>
+                <div class="drop-status mono status-soon">COMING SOON</div>
+            </div>
+
+            <div class="drop-item">
+                <div class="drop-id mono">001</div>
+                <div class="drop-desc">
+                    <h3>ORIGIN SEQUENCE</h3>
+                    <p class="dim mono">Bundle</p>
+                </div>
+                <div class="drop-status mono status-closed">CLOSED</div>
+            </div>
+
+             <div class="drop-item">
+                <div class="drop-id mono">000</div>
+                <div class="drop-desc">
+                    <h3>BETA TEST</h3>
+                    <p class="dim mono">Sticker Pack</p>
+                </div>
+                <div class="drop-status mono status-closed">ARCHIVED</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
