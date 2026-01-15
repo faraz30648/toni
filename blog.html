@@ -74,44 +74,30 @@
 
                 let articles = [];
 
-                // Process Global Items
-                if (globalData.items) {
-                    articles = articles.concat(globalData.items.map(item => {
-                        // We clean the content HERE before saving it
+                const processItems = (items, tag, source) => {
+                    if (!items) return [];
+                    return items.map(item => {
+                        // Extract ONLY the first paragraph
                         const rawContent = item.description || item.content;
-                        const cleanedContent = cleanRSSContent(rawContent);
+                        const firstPara = extractFirstParagraph(rawContent);
                         
                         return {
                             title: item.title,
                             date: item.pubDate.split(' ')[0],
-                            content: cleanedContent,
-                            snippet: stripHtml(cleanedContent).substring(0, 120) + '...',
+                            content: firstPara, // Saving only the clean paragraph
                             link: item.link,
                             image: item.thumbnail || item.enclosure?.link || '',
-                            tag: 'GLOBAL',
-                            source: 'SNEAKERNEWS'
+                            tag: tag,
+                            source: source
                         };
-                    }));
-                }
+                    });
+                };
 
-                // Process India Items
-                if (indiaData.items) {
-                    articles = articles.concat(indiaData.items.map(item => {
-                        const rawContent = item.description || item.content;
-                        const cleanedContent = cleanRSSContent(rawContent);
-
-                        return {
-                            title: item.title,
-                            date: item.pubDate.split(' ')[0],
-                            content: cleanedContent,
-                            snippet: stripHtml(cleanedContent).substring(0, 120) + '...',
-                            link: item.link,
-                            image: '', 
-                            tag: 'INDIA',
-                            source: 'MARKET_WIRE'
-                        };
-                    }));
-                }
+                // Merge Data
+                articles = [
+                    ...processItems(globalData.items, 'GLOBAL', 'SNEAKERNEWS'),
+                    ...processItems(indiaData.items, 'INDIA', 'MARKET_WIRE')
+                ];
 
                 // Sort by date
                 articles.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -122,25 +108,23 @@
                 articles.forEach((post, index) => {
                     const article = document.createElement('article');
                     article.className = 'blog-card';
-                    
                     const safeId = `post_${index}`;
                     
+                    // Blog Card View
                     article.innerHTML = `
                         <div class="blog-meta mono">
                             <span class="blog-date">${post.date}</span>
                             <span class="blog-cat" style="color: ${post.tag === 'INDIA' ? '#ff9933' : '#ffd700'}">[${post.tag}]</span>
                         </div>
                         <h2 class="blog-title">${post.title}</h2>
-                        <p class="blog-snippet mono">${post.snippet}</p>
+                        <p class="blog-snippet mono">${post.content.substring(0, 100)}...</p>
                         <div class="blog-tags">
                             <span class="tag">#${post.source}</span>
                         </div>
                         <button onclick="readArticle('${safeId}')" class="read-btn mono">ACCESS_DATA ></button>
                     `;
                     
-                    // Save CLEANED data to memory
                     sessionStorage.setItem(safeId, JSON.stringify(post));
-                    
                     container.appendChild(article);
                 });
 
@@ -150,37 +134,44 @@
             }
         }
 
-        // --- CLEANING FUNCTION ---
-        function cleanRSSContent(html) {
+        // --- NEW: EXTRACT FIRST PARAGRAPH ONLY ---
+        function extractFirstParagraph(html) {
             if (!html) return "";
-
-            let clean = html;
-
-            // 1. Remove "The post... appeared first on..." (Global match)
-            // This regex finds "The post" followed by anything until "Sneaker News."
-            clean = clean.replace(/The post.*?appeared first on.*?(\.|<\/p>)/g, '');
-            clean = clean.replace(/The post.*?Sneaker News\./g, ''); // Secondary catch
-
-            // 2. Remove Copyrights, Permalinks, Social Junk
-            // We use specific phrases found in your screenshot
-            clean = clean.replace(/© Sneaker News.*/g, '');
-            clean = clean.replace(/Permalink/g, '');
-            clean = clean.replace(/\| No comment \|/g, '');
-            clean = clean.replace(/No comment/g, '');
-            clean = clean.replace(/\|/g, ''); // Remove stray pipes
-            clean = clean.replace(/Add to del\.icio\.us/g, '');
             
-            // 3. Remove empty paragraphs left behind
-            clean = clean.replace(/<p>\s*<\/p>/g, '');
-            clean = clean.replace(/<br>\s*<br>/g, '');
+            // 1. Create temp element to parse HTML
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
 
-            return clean;
-        }
+            // 2. Try to find the first <p> tag with substantial text
+            const paragraphs = temp.getElementsByTagName('p');
+            let foundText = "";
 
-        function stripHtml(html) {
-            let tmp = document.createElement("DIV");
-            tmp.innerHTML = html;
-            return tmp.textContent || tmp.innerText || "";
+            for (let p of paragraphs) {
+                // Remove internal links/junk from the p tag before checking
+                let text = p.textContent || p.innerText;
+                // We look for a paragraph longer than 40 chars to avoid "Caption" or "Byline"
+                if (text && text.length > 40) {
+                    foundText = text.trim();
+                    break;
+                }
+            }
+
+            // 3. Fallback: If no good <p> found (common in Google News), use the raw text
+            if (!foundText) {
+                foundText = temp.textContent || temp.innerText || "";
+            }
+
+            // 4. CLEANING: Remove the specific "RSS Footer" junk using Regex
+            // Removes "The post... appeared first on..."
+            foundText = foundText.replace(/The post.*?appeared first on.*/s, "");
+            // Removes "Copyright..."
+            foundText = foundText.replace(/©.*/s, "");
+            // Removes "Permalink..."
+            foundText = foundText.replace(/Permalink.*/s, "");
+            // Removes "No comment"
+            foundText = foundText.replace(/No comment.*/s, "");
+            
+            return foundText;
         }
 
         function readArticle(id) {
