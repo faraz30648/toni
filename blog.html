@@ -34,24 +34,21 @@
         <header style="margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
             <h1 class="mono dim">MARKET INTEL</h1>
             <p class="mono text-sub" style="margin-top: 1rem; max-width: 500px;">
-                Analysis of the underground collectibles market. <br>
-                <span style="color: #ffd700;">// SOURCE: LIVE WIRE</span>
+                Live feed from the underground.<br>
+                <span style="color: #ffd700;">// STATUS: CONNECTED TO GLOBAL NETWORK</span>
             </p>
         </header>
 
         <div id="blog-grid" class="blog-list">
             <div class="loading-state mono">ESTABLISHING CONNECTION...</div>
         </div>
-
     </main>
 
     <script>
-        // --- NAVIGATION LOGIC ---
         function toggleMenu() {
             const nav = document.querySelector('.nav-links');
             const btn = document.getElementById('menu-icon');
             nav.classList.toggle('active');
-            
             if (nav.classList.contains('active')) {
                 btn.innerHTML = '✕';
                 document.body.style.overflow = 'hidden'; 
@@ -61,84 +58,108 @@
             }
         }
 
-        // --- API & BLOG LOGIC ---
+        // --- REAL API FETCHING ---
         
-        // Configuration
-        // To use a real API (like Contentful, Strapi, or a JSON file on GitHub), replace this URL.
-        const API_ENDPOINT = 'https://api.example.com/v1/posts'; 
-        
-        // MOCK DATA (Simulating the API response for now)
-        const MOCK_DATA = [
-            {
-                id: 101,
-                title: "The Quiet Rise of Vintage Indian Vinyl",
-                date: "2024-10-12",
-                category: "MARKET WATCH",
-                snippet: "Why collectors in Mumbai and Tokyo are hunting for 70s Bollywood funk. The supply is drying up, and prices are tripling in the underground circuit.",
-                tags: ["INDIA", "ANALOG"]
-            },
-            {
-                id: 102,
-                title: "Dead Stock: The Myth of 'Unopened'",
-                date: "2024-10-08",
-                category: "THEORY",
-                snippet: "A deep dive into the psychology of sealed toys. When does an object cease to be a toy and become purely a financial asset?",
-                tags: ["GLOBAL", "INVESTMENT"]
-            },
-            {
-                id: 103,
-                title: "Streetwear Resale is Crashing (And Why That's Good)",
-                date: "2024-09-28",
-                category: "ANALYSIS",
-                snippet: "The hype bubble has burst. We analyze why true archivists are finally regaining control of the narrative from flippers.",
-                tags: ["CULTURE", "DECLINE"]
-            }
-        ];
+        // We use rss2json to convert real RSS feeds into usable JSON data
+        const FEED_GLOBAL = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fsneakernews.com%2Ffeed%2F';
+        const FEED_INDIA = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fnews.google.com%2Frss%2Fsearch%3Fq%3Dcollectibles%2Bmarket%2Bindia%26hl%3Den-IN%26gl%3DIN%26ceid%3DIN%3Aen';
 
         async function fetchMarketIntel() {
             const container = document.getElementById('blog-grid');
             
             try {
-                // UNCOMMENT THE LINES BELOW TO USE A REAL API
-                // const response = await fetch(API_ENDPOINT);
-                // const data = await response.json();
-                
-                // USING MOCK DATA FOR DEMONSTRATION
-                await new Promise(r => setTimeout(r, 800)); // Fake delay to look like a hack/load
-                const data = MOCK_DATA; 
+                // 1. Fetch both feeds in parallel
+                const [globalRes, indiaRes] = await Promise.all([
+                    fetch(FEED_GLOBAL),
+                    fetch(FEED_INDIA)
+                ]);
 
-                // Clear loading state
+                const globalData = await globalRes.json();
+                const indiaData = await indiaRes.json();
+
+                // 2. Process & Tag Data
+                let articles = [];
+
+                // Process Global Items
+                if (globalData.items) {
+                    articles = articles.concat(globalData.items.map(item => ({
+                        title: item.title,
+                        date: item.pubDate.split(' ')[0],
+                        snippet: stripHtml(item.description).substring(0, 120) + '...',
+                        content: item.description, // Store full desc for article page
+                        link: item.link,
+                        image: item.thumbnail || item.enclosure?.link || '',
+                        tag: 'GLOBAL',
+                        source: 'SNEAKERNEWS'
+                    })));
+                }
+
+                // Process India Items
+                if (indiaData.items) {
+                    articles = articles.concat(indiaData.items.map(item => ({
+                        title: item.title,
+                        date: item.pubDate.split(' ')[0],
+                        snippet: stripHtml(item.description).substring(0, 120) + '...',
+                        content: item.description,
+                        link: item.link,
+                        image: '', // Google RSS rarely has clean images
+                        tag: 'INDIA',
+                        source: 'MARKET_WIRE'
+                    })));
+                }
+
+                // 3. Sort by date (Newest first)
+                articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // 4. Render
                 container.innerHTML = '';
-
-                // Render Items
-                data.forEach(post => {
+                
+                articles.forEach((post, index) => {
                     const article = document.createElement('article');
                     article.className = 'blog-card';
+                    
+                    // We save the article data to localStorage so article.html can read it
+                    // without needing a backend database.
+                    const safeId = `post_${index}`;
                     
                     article.innerHTML = `
                         <div class="blog-meta mono">
                             <span class="blog-date">${post.date}</span>
-                            <span class="blog-cat">[${post.category}]</span>
+                            <span class="blog-cat" style="color: ${post.tag === 'INDIA' ? '#ff9933' : '#ffd700'}">[${post.tag}]</span>
                         </div>
                         <h2 class="blog-title">${post.title}</h2>
                         <p class="blog-snippet mono">${post.snippet}</p>
                         <div class="blog-tags">
-                            ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                            <span class="tag">#${post.source}</span>
                         </div>
-                        <button class="read-btn mono">ACCESS_DATA ></button>
+                        <button onclick="readArticle('${safeId}')" class="read-btn mono">ACCESS_DATA ></button>
                     `;
+                    
+                    // Save to memory
+                    sessionStorage.setItem(safeId, JSON.stringify(post));
                     
                     container.appendChild(article);
                 });
 
             } catch (error) {
-                container.innerHTML = `<div class="error-state mono">CONNECTION FAILED: ${error.message}</div>`;
+                console.error(error);
+                container.innerHTML = `<div class="error-state mono">SIGNAL LOST: UNABLE TO FETCH EXTERNAL DATA</div>`;
             }
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', fetchMarketIntel);
+        function readArticle(id) {
+            // Navigate to article page with the ID
+            window.location.href = `article.html?id=${id}`;
+        }
 
+        // Helper to clean up RSS descriptions
+        function stripHtml(html) {
+            let tmp = document.createElement("DIV");
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || "";
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchMarketIntel);
     </script>
 </body>
 </html>
