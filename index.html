@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="css/style.css">
     
     <style>
-        /* 1. VIDEO PARALLAX FIXES */
+        /* 1. LAYOUT & SCROLLING */
+        /* Ensures content sits above video */
         .video-wrapper {
             position: fixed;
             top: 0;
@@ -31,98 +32,170 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.75); /* Dark tint for readability */
+            background: rgba(0, 0, 0, 0.75);
             z-index: 1;
         }
 
-        /* 2. LAYOUT & SCROLLING */
-        /* Ensures content sits above video */
-        .navbar, .main-scroll-container {
-            position: relative;
-            z-index: 2;
+        .navbar {
+            position: fixed; /* Fixed top for all screens */
+            top: 0;
+            width: 100%;
         }
 
-        /* Hero takes up full viewport initially */
+        .main-scroll-container {
+            position: relative;
+            z-index: 2;
+            padding-top: 80px; /* Space for navbar */
+        }
+
+        /* 2. HERO SECTION TYPOGRAPHY */
         .hero-screen {
             min-height: 90vh; 
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding-bottom: 2rem;
+            padding: 2rem 0;
         }
 
-        /* 3. NEW SECTIONS TYPOGRAPHY */
+        .hero-title {
+            /* Massive responsive font size */
+            font-size: clamp(3.5rem, 13vw, 9rem);
+            font-weight: 900;
+            line-height: 0.9;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 2rem;
+            letter-spacing: -2px;
+            word-spacing: 100vw; /* Forces line breaks on words if needed */
+        }
+
+        /* 3. SECTIONS */
         .content-section {
             padding: 4rem 0;
-            border-top: 1px solid #1a1a1a;
+            border-top: 1px solid #333;
         }
 
         .section-label {
             font-family: 'Courier New', Courier, monospace;
-            color: #555;
+            color: #666;
             font-size: 0.9rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             display: block;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .text-lead {
-            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-size: clamp(1.5rem, 4vw, 3rem);
             font-weight: 700;
             line-height: 1.1;
             text-transform: uppercase;
-            margin-bottom: 1rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
         }
 
         .text-sub {
             font-family: 'Courier New', Courier, monospace;
-            color: #ccc;
-            font-size: 1.1rem;
-            line-height: 1.5;
+            color: #bbb;
+            font-size: 1rem;
+            line-height: 1.6;
             max-width: 600px;
         }
 
-        .text-dim {
-            color: #666;
+        .text-dim { color: #666; }
+
+        /* 4. ACCORDION STYLES */
+        .accordion {
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Steps List */
-        .steps-list {
+        details {
+            border-bottom: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        details:first-child { border-top: 1px solid #333; }
+
+        summary {
             list-style: none;
-            padding: 0;
+            cursor: pointer;
+            padding: 1.5rem 0;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .step-item {
+        /* Remove default triangle */
+        summary::-webkit-details-marker { display: none; }
+
+        /* Custom Icon */
+        summary::after {
+            content: "+";
+            font-family: 'Courier New', monospace;
+            font-weight: 300;
+            font-size: 1.5rem;
+            color: #666;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(45deg); /* Turns + into x */
+            color: #fff;
+        }
+
+        details[open] summary {
+            color: #fff;
+        }
+
+        .accordion-content {
+            padding-bottom: 2rem;
+            font-family: 'Courier New', Courier, monospace;
+            color: #888;
+            font-size: 1rem;
+            line-height: 1.5;
+            max-width: 90%;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 5. BUTTONS & UI */
+        .status-block {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
             margin-bottom: 2rem;
         }
 
-        .step-title {
-            display: block;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.2rem;
-            text-transform: uppercase;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: red;
+            border-radius: 50%;
+            box-shadow: 0 0 10px red;
+            animation: pulse 2s infinite;
         }
 
-        .step-desc {
-            font-family: 'Courier New', Courier, monospace;
-            color: #888;
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
 
-        /* Stacked List */
-        .stacked-list div {
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            border-bottom: 1px solid #1a1a1a;
-            padding: 1rem 0;
-        }
-
-        .stacked-list div:last-child {
-            border-bottom: none;
-        }
-
-        /* Buttons */
         .btn-primary {
             display: inline-block;
             border: 1px solid #fff;
@@ -130,20 +203,38 @@
             padding: 15px 40px;
             font-family: 'Courier New', Courier, monospace;
             text-transform: uppercase;
+            font-weight: 700;
             margin-top: 1rem;
             transition: all 0.3s ease;
+            text-decoration: none;
         }
 
         .btn-primary:hover {
             background: #fff;
             color: #000;
         }
-        
+
         .micro-text {
             font-size: 0.75rem;
             color: #555;
-            margin-top: 10px;
+            margin-top: 15px;
             display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Steps List */
+        .steps-list { list-style: none; padding: 0; }
+        .step-item { margin-bottom: 2rem; }
+        .step-title { display: block; font-size: 1.2rem; font-weight: 700; color: white; text-transform: uppercase; }
+        .step-desc { font-family: 'Courier New', Courier, monospace; color: #666; }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            .hero-screen {
+                justify-content: flex-start;
+                padding-top: 4rem;
+            }
         }
     </style>
 </head>
@@ -158,32 +249,36 @@
 
     <nav class="navbar">
         <a href="index.html" class="brand-logo">TONI</a>
-        <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+        
+        <button class="mobile-menu-btn" aria-label="Toggle Menu" onclick="toggleMenu()">
+            <span id="menu-icon">☰</span>
+        </button>
+
         <ul class="nav-links">
-            <li><a href="index.html" class="active mono">Portal</a></li>
-            <li><a href="drops.html" class="mono">Drops</a></li>
-            <li><a href="about.html" class="mono">Signal</a></li>
-            <li><a href="access.html" class="mono">Access</a></li>
+            <li><a href="index.html" class="active">Portal</a></li>
+            <li><a href="drops.html">Drops</a></li>
+            <li><a href="about.html">Signal</a></li>
+            <li><a href="access.html">Access</a></li>
         </ul>
     </nav>
 
     <main class="container main-scroll-container">
         
         <section class="hero-screen">
-            <h1 class="hero-title">TONI IS NOT<br>ALWAYS<br>AVAILABLE.</h1>
+            <h1 class="hero-title">
+                TONI IS NOT<br>
+                ALWAYS<br>
+                AVAILABLE.
+            </h1>
             
             <p class="text-sub" style="margin-bottom: 2rem;">
                 Limited edition drops. No restocks.<br>
                 Join the few who stay informed.
             </p>
             
-            <div class="status-block mono">
+            <div class="status-block">
                 <span class="status-dot"></span>
                 <span>CURRENT DROP: STANDBY</span>
-            </div>
-
-            <div style="margin-top: 1rem;">
-                <a href="access.html" class="btn-primary">GET NOTIFIED</a>
             </div>
         </section>
 
@@ -193,10 +288,7 @@
             </div>
             <p class="text-sub">
                 We release items without warning.<br>
-                We don’t restock.<br>
-                We don’t repeat drops.
-            </p>
-            <p class="text-sub text-dim" style="margin-top: 1rem;">
+                We don’t restock. We don’t repeat drops.<br>
                 Each release is a moment. Not a catalog.
             </p>
         </section>
@@ -206,7 +298,7 @@
             <ul class="steps-list">
                 <li class="step-item">
                     <span class="step-title">1. A DROP IS ANNOUNCED</span>
-                    <span class="step-desc">Only through our signal.</span>
+                    <span class="step-desc">Only through our signal (email).</span>
                 </li>
                 <li class="step-item">
                     <span class="step-title">2. THE DROP OPENS</span>
@@ -221,13 +313,38 @@
 
         <section class="content-section">
             <span class="section-label">WHAT APPEARS</span>
-            <div class="stacked-list">
-                <div>Limited-run T-shirts</div>
-                <div>Stickers & printed artifacts</div>
-                <div>Objects made once</div>
-                <div>Experiments that don’t return</div>
+            
+            <div class="accordion">
+                <details>
+                    <summary>Limited-run T-shirts</summary>
+                    <div class="accordion-content">
+                        Heavyweight blanks. Puff print. Hand-numbered tags. Once they sell out, the screens are destroyed.
+                    </div>
+                </details>
+                
+                <details>
+                    <summary>Stickers & Artifacts</summary>
+                    <div class="accordion-content">
+                        Die-cut vinyl, holographic foils, and risograph prints. Physical fragments of the brand identity.
+                    </div>
+                </details>
+                
+                <details>
+                    <summary>Objects made once</summary>
+                    <div class="accordion-content">
+                        Resin casts, metalwork, and functional tools. Industrial design experiments produced in single batches.
+                    </div>
+                </details>
+                
+                <details>
+                    <summary>Experiments</summary>
+                    <div class="accordion-content">
+                        Audio loops, digital keys, and access tokens. Ephemeral data that dissolves after the drop closes.
+                    </div>
+                </details>
             </div>
-            <p class="text-sub text-dim" style="margin-top: 1.5rem;">
+
+            <p class="text-sub text-dim" style="margin-top: 2rem;">
                 Not every drop looks the same.
             </p>
         </section>
@@ -236,13 +353,12 @@
             <h2 class="text-lead" style="font-size: clamp(2rem, 5vw, 4rem);">
                 We don’t chase volume.<br>
                 We don’t flood the feed.<br>
-                We don’t explain everything.<br>
                 <span class="text-dim">TONI exists between drops.</span>
             </h2>
         </section>
 
         <section class="content-section" style="padding-bottom: 8rem;">
-            <h2 class="hero-title" style="font-size: clamp(2.5rem, 6vw, 5rem);">STAY CLOSE.<br>OR MISS IT.</h2>
+            <h2 class="text-lead" style="font-size: clamp(2.5rem, 6vw, 5rem);">STAY CLOSE.<br>OR MISS IT.</h2>
             <p class="text-sub">Drops are not announced publicly.</p>
             
             <a href="access.html" class="btn-primary">GET NOTIFIED</a>
@@ -254,7 +370,18 @@
 
     <script>
         function toggleMenu() {
-            document.querySelector('.nav-links').classList.toggle('active');
+            const nav = document.querySelector('.nav-links');
+            const btn = document.getElementById('menu-icon');
+            nav.classList.toggle('active');
+            
+            // Toggle icon between Hamburger and Close (X)
+            if (nav.classList.contains('active')) {
+                btn.innerHTML = '✕';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+            } else {
+                btn.innerHTML = '☰';
+                document.body.style.overflow = 'auto';
+            }
         }
     </script>
 </body>
