@@ -561,3 +561,27 @@ main.vcard-main {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+/* --- ARTICLE IMAGES --- */
+.article-hero-img {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 2rem;
+    border: 1px solid #333;
+}
+
+/* Ensure images inside RSS content don't break layout */
+.article-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+/* Clean up RSS text styles */
+.article-body a {
+    color: #ffd700;
+    text-decoration: underline;
+}
