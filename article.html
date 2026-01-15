@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TONI — ARTICLE</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="video-background">
+        <video autoplay muted loop playsinline id="bg-video">
+            <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">TONI</a>
+        <button class="mobile-menu-btn" aria-label="Toggle Menu" onclick="toggleMenu()">
+            <span id="menu-icon">☰</span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html" class="mono">Portal</a></li>
+            <li><a href="drops.html" class="mono">Drops</a></li>
+            <li><a href="blog.html" class="active mono">Intel</a></li>
+            <li><a href="access.html" class="mono">Access</a></li>
+        </ul>
+    </nav>
+
+    <main class="container section tilt-element" style="padding-top: 120px;">
+        <a href="blog.html" class="mono dim back-link">< BACK TO INTEL</a>
+
+        <article id="article-content" class="full-article">
+            <div class="loading-state mono">DECRYPTING DATA...</div>
+        </article>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.querySelector('.nav-links');
+            const btn = document.getElementById('menu-icon');
+            nav.classList.toggle('active');
+            if (nav.classList.contains('active')) {
+                btn.innerHTML = '✕';
+                document.body.style.overflow = 'hidden'; 
+            } else {
+                btn.innerHTML = '☰';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function loadArticle() {
+            const container = document.getElementById('article-content');
+            
+            // 1. Get ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            // 2. Retrieve data from session storage (saved by blog.html)
+            const articleData = sessionStorage.getItem(id);
+
+            if (articleData) {
+                const article = JSON.parse(articleData);
+                
+                // Determine image HTML (if image exists)
+                const imgHtml = article.image ? `<img src="${article.image}" class="article-hero-img" alt="Hero Image">` : '';
+
+                container.innerHTML = `
+                    <header class="article-header">
+                        <div class="blog-meta mono">
+                            <span>${article.date}</span>
+                            <span style="color: #ffd700;">[${article.tag}]</span>
+                        </div>
+                        <h1 class="article-title">${article.title}</h1>
+                        ${imgHtml}
+                    </header>
+                    
+                    <div class="article-body">
+                        ${article.content}
+                        
+                        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed #444;">
+                            <p class="mono dim">This intel was intercepted from external sources.</p>
+                            <a href="${article.link}" target="_blank" class="btn-primary" style="text-align: center; display: inline-block;">READ FULL SOURCE FILE ></a>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <h2 class="mono dim">ERROR: DATA FRAGMENT LOST</h2>
+                    <p class="mono">Please return to the Intel page to re-establish connection.</p>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadArticle);
+    </script>
+</body>
+</html>
