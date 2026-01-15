@@ -332,42 +332,73 @@ main.vcard-main {
 
 /* --- DROPS PAGE STYLES --- */
 
+/* 1. Video Background Fix for Android (prevents jumping URL bar) */
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    background-color: #111;
+}
+
+#bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6); /* Slightly darker for legibility */
+    z-index: 1;
+}
+
+/* 2. Drop Card Styles */
 .drops-list {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
     margin-top: 2rem;
+    padding-bottom: 4rem;
 }
 
 .drop-item {
-    background: rgba(20, 20, 20, 0.6); /* Glass dark styling */
+    background: rgba(20, 20, 20, 0.65);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, background 0.3s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* iOS support */
 }
 
 .drop-item:hover {
-    background: rgba(30, 30, 30, 0.8);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(40, 40, 40, 0.8);
+    border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
 }
 
 .drop-id {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #444; /* Dim by default */
+    color: #444; 
     min-width: 80px;
     letter-spacing: -2px;
+    line-height: 1;
 }
 
 .drop-desc h3 {
     font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #fff;
@@ -376,46 +407,52 @@ main.vcard-main {
 
 .drop-desc p {
     font-size: 0.9rem;
-    color: #888;
+    color: #999;
 }
 
 .drop-status {
-    font-size: 0.9rem;
-    padding: 8px 16px;
+    font-size: 0.85rem;
+    padding: 6px 12px;
     border-radius: 4px;
     border: 1px solid currentColor;
     text-transform: uppercase;
+    letter-spacing: 1px;
     white-space: nowrap;
 }
 
-/* Status Colors */
-.status-soon { color: #ffd700; /* Gold */ }
-.status-closed { color: #ff4444; /* Red */ }
-.status-archived { color: #666; /* Grey */ }
+.status-soon { color: #ffd700; }
+.status-closed { color: #ff4444; }
+.status-archived { color: #666; }
 
-/* --- MOBILE FIXES FOR DROPS --- */
+/* --- MOBILE & NARROW SCREEN FIXES (393px support) --- */
 @media (max-width: 768px) {
     .drop-item {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1.5rem;
-        padding: 1.5rem;
+        /* Tighter padding for narrow screens (393px) */
+        padding: 1.5rem 1.25rem; 
+        gap: 1rem;
     }
 
     .drop-id {
-        font-size: 3rem; /* Make the number a background element visually */
+        /* Remove negative margin that causes Android overlap */
+        margin-bottom: 0;
+        font-size: 2.5rem; 
         color: #333;
-        line-height: 1;
-        margin-bottom: -10px; /* Tighten gap slightly */
     }
 
     .drop-desc h3 {
-        font-size: 1.8rem; /* Larger readable title */
+        /* Slightly smaller text to prevent 3-line wrapping on 393px width */
+        font-size: 1.4rem; 
     }
 
     .drop-status {
         width: 100%;
         text-align: center;
-        margin-top: 0.5rem;
+        background: rgba(0,0,0,0.2);
+        margin-top: 0.25rem;
+        padding: 10px 0;
+        border: none;
+        background: rgba(255,255,255,0.05);
     }
 }
