@@ -17,11 +17,9 @@
 
     <nav class="navbar">
         <a href="index.html" class="brand-logo">TONI</a>
-        
         <button class="mobile-menu-btn" aria-label="Toggle Menu" onclick="toggleMenu()">
             <span id="menu-icon">☰</span>
         </button>
-
         <ul class="nav-links">
             <li><a href="index.html" class="mono">Portal</a></li>
             <li><a href="drops.html" class="mono">Drops</a></li>
@@ -78,31 +76,41 @@
 
                 // Process Global Items
                 if (globalData.items) {
-                    articles = articles.concat(globalData.items.map(item => ({
-                        title: item.title,
-                        date: item.pubDate.split(' ')[0],
-                        // Clean the content before saving
-                        content: cleanRSSContent(item.description || item.content),
-                        snippet: stripHtml(item.description).substring(0, 120) + '...',
-                        link: item.link,
-                        image: item.thumbnail || item.enclosure?.link || '',
-                        tag: 'GLOBAL',
-                        source: 'SNEAKERNEWS'
-                    })));
+                    articles = articles.concat(globalData.items.map(item => {
+                        // We clean the content HERE before saving it
+                        const rawContent = item.description || item.content;
+                        const cleanedContent = cleanRSSContent(rawContent);
+                        
+                        return {
+                            title: item.title,
+                            date: item.pubDate.split(' ')[0],
+                            content: cleanedContent,
+                            snippet: stripHtml(cleanedContent).substring(0, 120) + '...',
+                            link: item.link,
+                            image: item.thumbnail || item.enclosure?.link || '',
+                            tag: 'GLOBAL',
+                            source: 'SNEAKERNEWS'
+                        };
+                    }));
                 }
 
                 // Process India Items
                 if (indiaData.items) {
-                    articles = articles.concat(indiaData.items.map(item => ({
-                        title: item.title,
-                        date: item.pubDate.split(' ')[0],
-                        content: cleanRSSContent(item.description || item.content),
-                        snippet: stripHtml(item.description).substring(0, 120) + '...',
-                        link: item.link,
-                        image: '', 
-                        tag: 'INDIA',
-                        source: 'MARKET_WIRE'
-                    })));
+                    articles = articles.concat(indiaData.items.map(item => {
+                        const rawContent = item.description || item.content;
+                        const cleanedContent = cleanRSSContent(rawContent);
+
+                        return {
+                            title: item.title,
+                            date: item.pubDate.split(' ')[0],
+                            content: cleanedContent,
+                            snippet: stripHtml(cleanedContent).substring(0, 120) + '...',
+                            link: item.link,
+                            image: '', 
+                            tag: 'INDIA',
+                            source: 'MARKET_WIRE'
+                        };
+                    }));
                 }
 
                 // Sort by date
@@ -130,7 +138,7 @@
                         <button onclick="readArticle('${safeId}')" class="read-btn mono">ACCESS_DATA ></button>
                     `;
                     
-                    // Save cleaned data to memory
+                    // Save CLEANED data to memory
                     sessionStorage.setItem(safeId, JSON.stringify(post));
                     
                     container.appendChild(article);
@@ -143,23 +151,28 @@
         }
 
         // --- CLEANING FUNCTION ---
-        // This removes the specific junk text seen in your screenshot
         function cleanRSSContent(html) {
             if (!html) return "";
 
             let clean = html;
 
-            // 1. Remove "The post... appeared first on..."
+            // 1. Remove "The post... appeared first on..." (Global match)
+            // This regex finds "The post" followed by anything until "Sneaker News."
             clean = clean.replace(/The post.*?appeared first on.*?(\.|<\/p>)/g, '');
-            
-            // 2. Remove Copyrights and Social Links
+            clean = clean.replace(/The post.*?Sneaker News\./g, ''); // Secondary catch
+
+            // 2. Remove Copyrights, Permalinks, Social Junk
+            // We use specific phrases found in your screenshot
             clean = clean.replace(/© Sneaker News.*/g, '');
-            clean = clean.replace(/Permalink.*/g, '');
+            clean = clean.replace(/Permalink/g, '');
             clean = clean.replace(/\| No comment \|/g, '');
-            clean = clean.replace(/Add to del.icio.us/g, '');
+            clean = clean.replace(/No comment/g, '');
+            clean = clean.replace(/\|/g, ''); // Remove stray pipes
+            clean = clean.replace(/Add to del\.icio\.us/g, '');
             
             // 3. Remove empty paragraphs left behind
             clean = clean.replace(/<p>\s*<\/p>/g, '');
+            clean = clean.replace(/<br>\s*<br>/g, '');
 
             return clean;
         }
