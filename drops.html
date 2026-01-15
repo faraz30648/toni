@@ -31,8 +31,8 @@
         </ul>
     </nav>
 
-    <main class="container section tilt-element" style="padding-top: 100px;">
-        <header style="margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+    <main class="container section tilt-element" style="padding-top: 120px;">
+        <header style="margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
             <h1 class="mono dim">DROP LOG</h1>
         </header>
 
@@ -56,7 +56,7 @@
                 <div class="drop-status mono status-closed">CLOSED</div>
             </div>
 
-            <div class="drop-item" style="opacity: 0.5;">
+             <div class="drop-item" style="opacity: 0.5;">
                 <div class="drop-id mono">000</div>
                 <div class="drop-desc">
                     <h3>BETA TEST</h3>
@@ -83,12 +83,15 @@
             }
         }
 
-        // Slight parallax effect for video background
+        // Parallax - Subtle movement
         document.addEventListener('mousemove', (e) => {
             const video = document.querySelector('.video-background');
-            const x = (e.clientX / window.innerWidth) * 20 - 10;
-            const y = (e.clientY / window.innerHeight) * 20 - 10;
-            video.style.transform = `translate(${-x}px, ${-y}px) scale(1.1)`;
+            // Check if element exists before applying transform to avoid errors
+            if(video && window.innerWidth > 768) { 
+                const x = (e.clientX / window.innerWidth) * 20 - 10;
+                const y = (e.clientY / window.innerHeight) * 20 - 10;
+                video.style.transform = `translate(${-x}px, ${-y}px) scale(1.05)`;
+            }
         });
     </script>
 </body>
