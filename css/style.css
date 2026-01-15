@@ -329,3 +329,93 @@ main.vcard-main {
         text-decoration: line-through;
     }
 }
+
+/* --- DROPS PAGE STYLES --- */
+
+.drops-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.drop-item {
+    background: rgba(20, 20, 20, 0.6); /* Glass dark styling */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.drop-item:hover {
+    background: rgba(30, 30, 30, 0.8);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.drop-id {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #444; /* Dim by default */
+    min-width: 80px;
+    letter-spacing: -2px;
+}
+
+.drop-desc h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
+    line-height: 1.1;
+}
+
+.drop-desc p {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.drop-status {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 1px solid currentColor;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Status Colors */
+.status-soon { color: #ffd700; /* Gold */ }
+.status-closed { color: #ff4444; /* Red */ }
+.status-archived { color: #666; /* Grey */ }
+
+/* --- MOBILE FIXES FOR DROPS --- */
+@media (max-width: 768px) {
+    .drop-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .drop-id {
+        font-size: 3rem; /* Make the number a background element visually */
+        color: #333;
+        line-height: 1;
+        margin-bottom: -10px; /* Tighten gap slightly */
+    }
+
+    .drop-desc h3 {
+        font-size: 1.8rem; /* Larger readable title */
+    }
+
+    .drop-status {
+        width: 100%;
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+}
