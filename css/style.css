@@ -585,3 +585,23 @@ main.vcard-main {
     color: #ffd700;
     text-decoration: underline;
 }
+/* --- ARTICLE CONTENT CLEANUP --- */
+
+/* Hide common RSS footer classes if they exist in the HTML */
+.article-body .feed-footer, 
+.article-body .rss-footer {
+    display: none !important;
+}
+
+/* Force links in the article body to look decent */
+.article-body a {
+    color: #ffd700;
+    text-decoration: none;
+    border-bottom: 1px dotted #ffd700;
+    word-break: break-word; /* Prevents long URLs from breaking layout */
+}
+
+.article-body a:hover {
+    color: #fff;
+    border-bottom-style: solid;
+}
