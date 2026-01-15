@@ -644,3 +644,24 @@ main.vcard-main {
     line-height: 1.7;
     color: #ccc;
 }
+/* --- ARTICLE SIMPLIFIED LAYOUT --- */
+
+.article-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #ccc;
+    margin-bottom: 0; /* Remove bottom margin so button sits tight */
+}
+
+.article-footer {
+    margin-top: 4rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333;
+    text-align: left;
+}
+
+.article-footer span {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: #666;
+}
