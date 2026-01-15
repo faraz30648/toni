@@ -605,3 +605,42 @@ main.vcard-main {
     color: #fff;
     border-bottom-style: solid;
 }
+/* --- ARTICLE TEXT CLEANUP & STYLING --- */
+
+/* 1. Force hide known RSS garbage that might survive */
+.article-body .feed-footer, 
+.article-body .rss-footer,
+.article-body .share-links {
+    display: none !important;
+}
+
+/* 2. Style links inside the article so they don't look broken */
+.article-body a {
+    color: #ffd700; /* Gold */
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(255, 215, 0, 0.3);
+    word-break: break-word; /* Prevents long URLs from breaking mobile layout */
+    transition: all 0.2s;
+}
+
+.article-body a:hover {
+    color: #fff;
+    border-bottom: 1px solid #ffd700;
+}
+
+/* 3. Ensure images in article body are responsive */
+.article-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1.5rem 0;
+    opacity: 0.9;
+}
+
+/* 4. Paragraph spacing for readability */
+.article-body p {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #ccc;
+}
