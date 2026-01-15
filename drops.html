@@ -8,33 +8,41 @@
 </head>
 <body>
 
+    <div class="video-background">
+        <video autoplay muted loop playsinline id="bg-video">
+            <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
     <nav class="navbar">
         <a href="index.html" class="brand-logo">TONI</a>
-        <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+        <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('active')" style="color: white; font-size: 1.5rem;">☰</button>
         <ul class="nav-links">
             <li><a href="index.html" class="mono">Portal</a></li>
             <li><a href="drops.html" class="active mono">Drops</a></li>
             <li><a href="about.html" class="mono">Signal</a></li>
             <li><a href="access.html" class="mono">Access</a></li>
+            <li><a href="archive.html" class="mono">Archive</a></li>
         </ul>
     </nav>
 
-    <main class="container section">
-        <header style="margin-bottom: 4rem;">
+    <main class="container section tilt-element">
+        <header style="margin-bottom: 4rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 2rem;">
             <h1 class="mono dim">DROP LOG</h1>
         </header>
 
         <div class="drops-list">
             <div class="drop-item">
-                <div class="drop-id mono">002</div>
+                <div class="drop-id mono" style="font-size: 2rem; color: var(--accent);">002</div>
                 <div class="drop-desc">
-                    <h3>HEAVY METAL SILENCE</h3>
+                    <h3 style="letter-spacing: 2px;">HEAVY METAL SILENCE</h3>
                     <p class="dim mono">T-Shirt / Artifact</p>
                 </div>
                 <div class="drop-status mono status-soon">COMING SOON</div>
             </div>
 
-            <div class="drop-item">
+            <div class="drop-item" style="opacity: 0.7;">
                 <div class="drop-id mono">001</div>
                 <div class="drop-desc">
                     <h3>ORIGIN SEQUENCE</h3>
@@ -43,7 +51,7 @@
                 <div class="drop-status mono status-closed">CLOSED</div>
             </div>
 
-             <div class="drop-item">
+             <div class="drop-item" style="opacity: 0.5;">
                 <div class="drop-id mono">000</div>
                 <div class="drop-desc">
                     <h3>BETA TEST</h3>
@@ -55,9 +63,13 @@
     </main>
 
     <script>
-        function toggleMenu() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        }
+        // Parallax script same as index.html
+        document.addEventListener('mousemove', (e) => {
+            const video = document.querySelector('.video-background');
+            const x = (e.clientX / window.innerWidth) * 20 - 10;
+            const y = (e.clientY / window.innerHeight) * 20 - 10;
+            video.style.transform = `translate(${-x}px, ${-y}px) scale(1.1)`;
+        });
     </script>
 </body>
 </html>
