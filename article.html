@@ -52,19 +52,16 @@
 
         function loadArticle() {
             const container = document.getElementById('article-content');
-            
-            // 1. Get ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
-
-            // 2. Retrieve data from session storage (saved by blog.html)
             const articleData = sessionStorage.getItem(id);
 
             if (articleData) {
                 const article = JSON.parse(articleData);
                 
-                // Determine image HTML (if image exists)
-                const imgHtml = article.image ? `<img src="${article.image}" class="article-hero-img" alt="Hero Image">` : '';
+                // If there's an image, we can show it, or remove this line if you want TEXT ONLY.
+                // Keeping it creates a nice visual header.
+                const imgHtml = article.image ? `<img src="${article.image}" class="article-hero-img" alt="Hero">` : '';
 
                 container.innerHTML = `
                     <header class="article-header">
@@ -77,18 +74,21 @@
                     </header>
                     
                     <div class="article-body">
-                        ${article.content}
+                        <p class="mono article-text">${article.content}</p>
                         
-                        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed #444;">
-                            <p class="mono dim">This intel was intercepted from external sources.</p>
-                            <a href="${article.link}" target="_blank" class="btn-primary" style="text-align: center; display: inline-block;">READ FULL SOURCE FILE ></a>
+                        <div style="margin-top: 2rem;">
+                            <a href="${article.link}" target="_blank" class="btn-primary">SEE ARTICLE ></a>
+                        </div>
+
+                        <div class="article-footer">
+                            <span class="mono dim">SOURCE: ${article.source}</span>
                         </div>
                     </div>
                 `;
             } else {
                 container.innerHTML = `
                     <h2 class="mono dim">ERROR: DATA FRAGMENT LOST</h2>
-                    <p class="mono">Please return to the Intel page to re-establish connection.</p>
+                    <p class="mono">Please return to the Intel page.</p>
                 `;
             }
         }
