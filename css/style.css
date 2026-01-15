@@ -224,3 +224,108 @@ main.vcard-main {
   .nav-links.active { display: flex; }
   main.vcard-main { flex-direction: column; }
 }
+
+/* --- GLOBAL NAVIGATION FIXES --- */
+
+/* Base Navbar Styles (overrides) */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.brand-logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: white; /* Or your theme color */
+    letter-spacing: -1px;
+    z-index: 101; /* Above mobile menu overlay */
+    position: relative;
+    text-transform: uppercase;
+}
+
+/* Desktop View (Default) */
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: #888;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-family: 'Courier New', Courier, monospace;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: white;
+}
+
+/* Hide Hamburger on Desktop */
+.mobile-menu-btn {
+    display: none;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+    }
+
+    /* Show Hamburger */
+    .mobile-menu-btn {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        z-index: 101; /* Above overlay */
+        position: relative;
+    }
+
+    /* Stylish Full Screen Menu */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: black; /* Deep black background */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 3rem;
+        z-index: 100;
+        
+        /* Hidden state */
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-links.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: all;
+    }
+
+    .nav-links li a {
+        font-size: 2rem; /* Big text for mobile */
+        font-weight: 700;
+        color: white;
+        letter-spacing: 2px;
+    }
+    
+    .nav-links li a.active {
+        color: #ffcc00; /* Accent color or keep white */
+        text-decoration: line-through;
+    }
+}
