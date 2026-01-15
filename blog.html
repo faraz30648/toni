@@ -59,8 +59,6 @@
         }
 
         // --- REAL API FETCHING ---
-        
-        // We use rss2json to convert real RSS feeds into usable JSON data
         const FEED_GLOBAL = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fsneakernews.com%2Ffeed%2F';
         const FEED_INDIA = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fnews.google.com%2Frss%2Fsearch%3Fq%3Dcollectibles%2Bmarket%2Bindia%26hl%3Den-IN%26gl%3DIN%26ceid%3DIN%3Aen';
 
@@ -68,7 +66,6 @@
             const container = document.getElementById('blog-grid');
             
             try {
-                // 1. Fetch both feeds in parallel
                 const [globalRes, indiaRes] = await Promise.all([
                     fetch(FEED_GLOBAL),
                     fetch(FEED_INDIA)
@@ -77,7 +74,6 @@
                 const globalData = await globalRes.json();
                 const indiaData = await indiaRes.json();
 
-                // 2. Process & Tag Data
                 let articles = [];
 
                 // Process Global Items
@@ -85,8 +81,9 @@
                     articles = articles.concat(globalData.items.map(item => ({
                         title: item.title,
                         date: item.pubDate.split(' ')[0],
+                        // Clean the content before saving
+                        content: cleanRSSContent(item.description || item.content),
                         snippet: stripHtml(item.description).substring(0, 120) + '...',
-                        content: item.description, // Store full desc for article page
                         link: item.link,
                         image: item.thumbnail || item.enclosure?.link || '',
                         tag: 'GLOBAL',
@@ -99,27 +96,25 @@
                     articles = articles.concat(indiaData.items.map(item => ({
                         title: item.title,
                         date: item.pubDate.split(' ')[0],
+                        content: cleanRSSContent(item.description || item.content),
                         snippet: stripHtml(item.description).substring(0, 120) + '...',
-                        content: item.description,
                         link: item.link,
-                        image: '', // Google RSS rarely has clean images
+                        image: '', 
                         tag: 'INDIA',
                         source: 'MARKET_WIRE'
                     })));
                 }
 
-                // 3. Sort by date (Newest first)
+                // Sort by date
                 articles.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                // 4. Render
+                // Render
                 container.innerHTML = '';
                 
                 articles.forEach((post, index) => {
                     const article = document.createElement('article');
                     article.className = 'blog-card';
                     
-                    // We save the article data to localStorage so article.html can read it
-                    // without needing a backend database.
                     const safeId = `post_${index}`;
                     
                     article.innerHTML = `
@@ -135,7 +130,7 @@
                         <button onclick="readArticle('${safeId}')" class="read-btn mono">ACCESS_DATA ></button>
                     `;
                     
-                    // Save to memory
+                    // Save cleaned data to memory
                     sessionStorage.setItem(safeId, JSON.stringify(post));
                     
                     container.appendChild(article);
@@ -147,16 +142,36 @@
             }
         }
 
-        function readArticle(id) {
-            // Navigate to article page with the ID
-            window.location.href = `article.html?id=${id}`;
+        // --- CLEANING FUNCTION ---
+        // This removes the specific junk text seen in your screenshot
+        function cleanRSSContent(html) {
+            if (!html) return "";
+
+            let clean = html;
+
+            // 1. Remove "The post... appeared first on..."
+            clean = clean.replace(/The post.*?appeared first on.*?(\.|<\/p>)/g, '');
+            
+            // 2. Remove Copyrights and Social Links
+            clean = clean.replace(/© Sneaker News.*/g, '');
+            clean = clean.replace(/Permalink.*/g, '');
+            clean = clean.replace(/\| No comment \|/g, '');
+            clean = clean.replace(/Add to del.icio.us/g, '');
+            
+            // 3. Remove empty paragraphs left behind
+            clean = clean.replace(/<p>\s*<\/p>/g, '');
+
+            return clean;
         }
 
-        // Helper to clean up RSS descriptions
         function stripHtml(html) {
             let tmp = document.createElement("DIV");
             tmp.innerHTML = html;
             return tmp.textContent || tmp.innerText || "";
+        }
+
+        function readArticle(id) {
+            window.location.href = `article.html?id=${id}`;
         }
 
         document.addEventListener('DOMContentLoaded', fetchMarketIntel);
