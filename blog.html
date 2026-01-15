@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TONI — INTEL</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="video-background">
+        <video autoplay muted loop playsinline id="bg-video">
+            <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">TONI</a>
+        
+        <button class="mobile-menu-btn" aria-label="Toggle Menu" onclick="toggleMenu()">
+            <span id="menu-icon">☰</span>
+        </button>
+
+        <ul class="nav-links">
+            <li><a href="index.html" class="mono">Portal</a></li>
+            <li><a href="drops.html" class="mono">Drops</a></li>
+            <li><a href="blog.html" class="active mono">Intel</a></li>
+            <li><a href="access.html" class="mono">Access</a></li>
+        </ul>
+    </nav>
+
+    <main class="container section tilt-element" style="padding-top: 120px;">
+        <header style="margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+            <h1 class="mono dim">MARKET INTEL</h1>
+            <p class="mono text-sub" style="margin-top: 1rem; max-width: 500px;">
+                Analysis of the underground collectibles market. <br>
+                <span style="color: #ffd700;">// SOURCE: LIVE WIRE</span>
+            </p>
+        </header>
+
+        <div id="blog-grid" class="blog-list">
+            <div class="loading-state mono">ESTABLISHING CONNECTION...</div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- NAVIGATION LOGIC ---
+        function toggleMenu() {
+            const nav = document.querySelector('.nav-links');
+            const btn = document.getElementById('menu-icon');
+            nav.classList.toggle('active');
+            
+            if (nav.classList.contains('active')) {
+                btn.innerHTML = '✕';
+                document.body.style.overflow = 'hidden'; 
+            } else {
+                btn.innerHTML = '☰';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // --- API & BLOG LOGIC ---
+        
+        // Configuration
+        // To use a real API (like Contentful, Strapi, or a JSON file on GitHub), replace this URL.
+        const API_ENDPOINT = 'https://api.example.com/v1/posts'; 
+        
+        // MOCK DATA (Simulating the API response for now)
+        const MOCK_DATA = [
+            {
+                id: 101,
+                title: "The Quiet Rise of Vintage Indian Vinyl",
+                date: "2024-10-12",
+                category: "MARKET WATCH",
+                snippet: "Why collectors in Mumbai and Tokyo are hunting for 70s Bollywood funk. The supply is drying up, and prices are tripling in the underground circuit.",
+                tags: ["INDIA", "ANALOG"]
+            },
+            {
+                id: 102,
+                title: "Dead Stock: The Myth of 'Unopened'",
+                date: "2024-10-08",
+                category: "THEORY",
+                snippet: "A deep dive into the psychology of sealed toys. When does an object cease to be a toy and become purely a financial asset?",
+                tags: ["GLOBAL", "INVESTMENT"]
+            },
+            {
+                id: 103,
+                title: "Streetwear Resale is Crashing (And Why That's Good)",
+                date: "2024-09-28",
+                category: "ANALYSIS",
+                snippet: "The hype bubble has burst. We analyze why true archivists are finally regaining control of the narrative from flippers.",
+                tags: ["CULTURE", "DECLINE"]
+            }
+        ];
+
+        async function fetchMarketIntel() {
+            const container = document.getElementById('blog-grid');
+            
+            try {
+                // UNCOMMENT THE LINES BELOW TO USE A REAL API
+                // const response = await fetch(API_ENDPOINT);
+                // const data = await response.json();
+                
+                // USING MOCK DATA FOR DEMONSTRATION
+                await new Promise(r => setTimeout(r, 800)); // Fake delay to look like a hack/load
+                const data = MOCK_DATA; 
+
+                // Clear loading state
+                container.innerHTML = '';
+
+                // Render Items
+                data.forEach(post => {
+                    const article = document.createElement('article');
+                    article.className = 'blog-card';
+                    
+                    article.innerHTML = `
+                        <div class="blog-meta mono">
+                            <span class="blog-date">${post.date}</span>
+                            <span class="blog-cat">[${post.category}]</span>
+                        </div>
+                        <h2 class="blog-title">${post.title}</h2>
+                        <p class="blog-snippet mono">${post.snippet}</p>
+                        <div class="blog-tags">
+                            ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                        </div>
+                        <button class="read-btn mono">ACCESS_DATA ></button>
+                    `;
+                    
+                    container.appendChild(article);
+                });
+
+            } catch (error) {
+                container.innerHTML = `<div class="error-state mono">CONNECTION FAILED: ${error.message}</div>`;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', fetchMarketIntel);
+
+    </script>
+</body>
+</html>
