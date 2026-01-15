@@ -1,106 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TONI — PORTAL</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TONI. Not always available. Underground culture drops.">
+    <title>TONI — PORTAL</title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* 1. VIDEO PARALLAX FIXES */
+        .video-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75); /* Dark tint for readability */
+            z-index: 1;
+        }
+
+        /* 2. LAYOUT & SCROLLING */
+        /* Ensures content sits above video */
+        .navbar, .main-scroll-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Hero takes up full viewport initially */
+        .hero-screen {
+            min-height: 90vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-bottom: 2rem;
+        }
+
+        /* 3. NEW SECTIONS TYPOGRAPHY */
+        .content-section {
+            padding: 4rem 0;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .section-label {
+            font-family: 'Courier New', Courier, monospace;
+            color: #555;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .text-lead {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .text-sub {
+            font-family: 'Courier New', Courier, monospace;
+            color: #ccc;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            max-width: 600px;
+        }
+
+        .text-dim {
+            color: #666;
+        }
+
+        /* Steps List */
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-item {
+            margin-bottom: 2rem;
+        }
+
+        .step-title {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+        }
+
+        .step-desc {
+            font-family: 'Courier New', Courier, monospace;
+            color: #888;
+        }
+
+        /* Stacked List */
+        .stacked-list div {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 1rem 0;
+        }
+
+        .stacked-list div:last-child {
+            border-bottom: none;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            display: inline-block;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 15px 40px;
+            font-family: 'Courier New', Courier, monospace;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #fff;
+            color: #000;
+        }
+        
+        .micro-text {
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 10px;
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="video-background">
-    <video autoplay muted loop playsinline id="bg-video">
-      <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4" type="video/mp4">
-    </video>
-    <div class="video-overlay"></div>
-  </div>
-
-  <nav class="navbar">
-      <a href="index.html" class="brand-logo">TONI</a>
-      <ul class="nav-links">
-          <li><a href="index.html" class="active mono">Portal</a></li>
-          <li><a href="drops.html" class="mono">Drops</a></li>
-          <li><a href="about.html" class="mono">Signal</a></li>
-          <li><a href="access.html" class="mono">Access</a></li>
-          <li><a href="archive.html" class="mono">Archive</a></li>
-      </ul>
-  </nav>
-
-  <main class="vcard-main">
-    
-    <aside class="sidebar tilt-element">
-      <div class="sidebar-info">
-        <figure class="avatar-box">
-          <img src="https://i.ibb.co/3Y01R48z/Untitled-design-2-removebg-preview.png" style="width: 100px; border-radius: 50%; border: 2px solid var(--accent);">
-        </figure>
-        <div class="info-content" style="margin-top: 1rem;">
-          <h1 class="name" style="font-size: 1.5rem;">Faraz Ahmed</h1>
-          <p class="title mono dim">Creative Director / TONI</p>
-        </div>
-      </div>
-      
-      <div class="separator" style="height: 1px; background: rgba(255,255,255,0.1); margin: 1.5rem 0;"></div>
-      
-      <ul class="contacts-list">
-        <li class="contact-item">
-          <div class="icon-box"><ion-icon name="mail-outline"></ion-icon></div>
-          <div class="contact-info">
-            <p class="contact-title dim">Email</p>
-            <a href="mailto:faraz30648@gmail.com" class="contact-link">faraz30648@gmail.com</a>
-          </div>
-        </li>
-      </ul>
-    </aside>
-
-    <div class="main-content">
-      <article class="about active tilt-element">
-        <header>
-          <h2 class="h2 article-title">Introduction</h2>
-        </header>
-        <section class="about-text">
-          <p>
-            Welcome to the digital portal. I am a dedicated professional bridging the gap between design and function. 
-            TONI is the manifestation of this philosophy.
-          </p>
-          <p style="margin-top: 1rem;">
-            Explore the drops, access the signal, or browse the archives using the navigation above.
-          </p>
-        </section>
-      </article>
+    <div class="video-wrapper">
+        <div class="video-overlay"></div>
+        <video autoplay muted loop playsinline class="bg-video">
+            <source src="css/homepage%20vid.mp4" type="video/mp4">
+        </video>
     </div>
 
-  </main>
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">TONI</a>
+        <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active mono">Portal</a></li>
+            <li><a href="drops.html" class="mono">Drops</a></li>
+            <li><a href="about.html" class="mono">Signal</a></li>
+            <li><a href="access.html" class="mono">Access</a></li>
+        </ul>
+    </nav>
 
-  <script>
-    // Parallax Effect for Video
-    document.addEventListener('mousemove', (e) => {
-        const video = document.querySelector('.video-background');
-        const x = (e.clientX / window.innerWidth) * 20 - 10;
-        const y = (e.clientY / window.innerHeight) * 20 - 10;
-        video.style.transform = `translate(${-x}px, ${-y}px) scale(1.1)`;
-    });
-
-    // 3D Tilt Effect for Cards
-    const cards = document.querySelectorAll('.tilt-element');
-    cards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = ((y - centerY) / centerY) * -5;
-            const rotateY = ((x - centerX) / centerX) * 5;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
+    <main class="container main-scroll-container">
         
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-        });
-    });
-  </script>
+        <section class="hero-screen">
+            <h1 class="hero-title">TONI IS NOT<br>ALWAYS<br>AVAILABLE.</h1>
+            
+            <p class="text-sub" style="margin-bottom: 2rem;">
+                Limited edition drops. No restocks.<br>
+                Join the few who stay informed.
+            </p>
+            
+            <div class="status-block mono">
+                <span class="status-dot"></span>
+                <span>CURRENT DROP: STANDBY</span>
+            </div>
+
+            <div style="margin-top: 1rem;">
+                <a href="access.html" class="btn-primary">GET NOTIFIED</a>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="text-lead">
+                TONI is a limited-edition culture project.
+            </div>
+            <p class="text-sub">
+                We release items without warning.<br>
+                We don’t restock.<br>
+                We don’t repeat drops.
+            </p>
+            <p class="text-sub text-dim" style="margin-top: 1rem;">
+                Each release is a moment. Not a catalog.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <span class="section-label">HOW IT WORKS</span>
+            <ul class="steps-list">
+                <li class="step-item">
+                    <span class="step-title">1. A DROP IS ANNOUNCED</span>
+                    <span class="step-desc">Only through our signal.</span>
+                </li>
+                <li class="step-item">
+                    <span class="step-title">2. THE DROP OPENS</span>
+                    <span class="step-desc">For a short time. No extensions.</span>
+                </li>
+                <li class="step-item">
+                    <span class="step-title">3. IT CLOSES FOREVER</span>
+                    <span class="step-desc">What’s gone stays gone.</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <span class="section-label">WHAT APPEARS</span>
+            <div class="stacked-list">
+                <div>Limited-run T-shirts</div>
+                <div>Stickers & printed artifacts</div>
+                <div>Objects made once</div>
+                <div>Experiments that don’t return</div>
+            </div>
+            <p class="text-sub text-dim" style="margin-top: 1.5rem;">
+                Not every drop looks the same.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h2 class="text-lead" style="font-size: clamp(2rem, 5vw, 4rem);">
+                We don’t chase volume.<br>
+                We don’t flood the feed.<br>
+                We don’t explain everything.<br>
+                <span class="text-dim">TONI exists between drops.</span>
+            </h2>
+        </section>
+
+        <section class="content-section" style="padding-bottom: 8rem;">
+            <h2 class="hero-title" style="font-size: clamp(2.5rem, 6vw, 5rem);">STAY CLOSE.<br>OR MISS IT.</h2>
+            <p class="text-sub">Drops are not announced publicly.</p>
+            
+            <a href="access.html" class="btn-primary">GET NOTIFIED</a>
+            
+            <span class="micro-text mono">Only drop alerts. Nothing extra.</span>
+        </section>
+
+    </main>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
