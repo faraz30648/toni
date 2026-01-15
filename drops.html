@@ -17,7 +17,11 @@
 
     <nav class="navbar">
         <a href="index.html" class="brand-logo">TONI</a>
-        <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('active')" style="color: white; font-size: 1.5rem;">☰</button>
+        
+        <button class="mobile-menu-btn" aria-label="Toggle Menu" onclick="toggleMenu()">
+            <span id="menu-icon">☰</span>
+        </button>
+
         <ul class="nav-links">
             <li><a href="index.html" class="mono">Portal</a></li>
             <li><a href="drops.html" class="active mono">Drops</a></li>
@@ -27,17 +31,18 @@
         </ul>
     </nav>
 
-    <main class="container section tilt-element">
-        <header style="margin-bottom: 4rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 2rem;">
+    <main class="container section tilt-element" style="padding-top: 100px;">
+        <header style="margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
             <h1 class="mono dim">DROP LOG</h1>
         </header>
 
         <div class="drops-list">
+            
             <div class="drop-item">
-                <div class="drop-id mono" style="font-size: 2rem; color: var(--accent);">002</div>
+                <div class="drop-id mono">002</div>
                 <div class="drop-desc">
-                    <h3 style="letter-spacing: 2px;">HEAVY METAL SILENCE</h3>
-                    <p class="dim mono">T-Shirt / Artifact</p>
+                    <h3>HEAVY METAL SILENCE</h3>
+                    <p class="mono">T-Shirt / Artifact</p>
                 </div>
                 <div class="drop-status mono status-soon">COMING SOON</div>
             </div>
@@ -46,24 +51,39 @@
                 <div class="drop-id mono">001</div>
                 <div class="drop-desc">
                     <h3>ORIGIN SEQUENCE</h3>
-                    <p class="dim mono">Bundle</p>
+                    <p class="mono">Bundle</p>
                 </div>
                 <div class="drop-status mono status-closed">CLOSED</div>
             </div>
 
-             <div class="drop-item" style="opacity: 0.5;">
+            <div class="drop-item" style="opacity: 0.5;">
                 <div class="drop-id mono">000</div>
                 <div class="drop-desc">
                     <h3>BETA TEST</h3>
-                    <p class="dim mono">Sticker Pack</p>
+                    <p class="mono">Sticker Pack</p>
                 </div>
-                <div class="drop-status mono status-closed">ARCHIVED</div>
+                <div class="drop-status mono status-archived">ARCHIVED</div>
             </div>
+
         </div>
     </main>
 
     <script>
-        // Parallax script same as index.html
+        function toggleMenu() {
+            const nav = document.querySelector('.nav-links');
+            const btn = document.getElementById('menu-icon');
+            nav.classList.toggle('active');
+            
+            if (nav.classList.contains('active')) {
+                btn.innerHTML = '✕';
+                document.body.style.overflow = 'hidden'; 
+            } else {
+                btn.innerHTML = '☰';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Slight parallax effect for video background
         document.addEventListener('mousemove', (e) => {
             const video = document.querySelector('.video-background');
             const x = (e.clientX / window.innerWidth) * 20 - 10;
