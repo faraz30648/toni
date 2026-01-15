@@ -456,3 +456,108 @@ main.vcard-main {
         background: rgba(255,255,255,0.05);
     }
 }
+/* --- BLOG / INTEL PAGE STYLES --- */
+
+.blog-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-bottom: 4rem;
+}
+
+.blog-card {
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid #333;
+    border-left: 4px solid #444; /* Accent bar on left */
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.blog-card:hover {
+    border-left-color: #ffd700; /* Gold accent on hover */
+    background: rgba(20, 20, 20, 0.9);
+    transform: translateX(5px);
+}
+
+.blog-meta {
+    font-size: 0.75rem;
+    color: #666;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 0.5rem;
+}
+
+.blog-cat {
+    color: #ffd700;
+}
+
+.blog-title {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.blog-snippet {
+    font-size: 0.9rem;
+    color: #999;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.blog-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.tag {
+    font-size: 0.7rem;
+    background: rgba(255,255,255,0.1);
+    padding: 4px 8px;
+    border-radius: 2px;
+    color: #bbb;
+    font-family: 'Courier New', monospace;
+}
+
+.read-btn {
+    background: transparent;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: center;
+}
+
+.read-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+.loading-state {
+    color: #ffd700;
+    text-align: center;
+    animation: blink 1s infinite;
+    padding: 2rem;
+    border: 1px dashed #ffd700;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* Tablet/Desktop Grid */
+@media (min-width: 768px) {
+    .blog-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
